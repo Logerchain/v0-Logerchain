@@ -25,7 +25,7 @@ export default function Home() {
               Where to grow your business as a photographer: site or social media?
             </p>
             <Link
-              href="/get-started"
+              href="/product"
               className="inline-block bg-white text-[#263238] px-6 py-3 rounded-md font-medium hover:bg-white/90 transition"
             >
               Get Started
