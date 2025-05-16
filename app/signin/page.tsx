@@ -6,6 +6,7 @@ import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
+import Cookies from "js-cookie"
 
 export default function SignIn() {
   const router = useRouter()
@@ -27,8 +28,9 @@ export default function SignIn() {
     }
 
     // Mock login - in a real app, this would call an API
-    localStorage.setItem("isLoggedIn", "true")
-    localStorage.setItem("userEmail", email)
+    // Set cookies instead of localStorage for better security
+    Cookies.set("isLoggedIn", "true", { expires: 7 }) // Expires in 7 days
+    Cookies.set("userEmail", email, { expires: 7 })
 
     // Redirect to the original destination or home page
     router.push(redirectUrl)

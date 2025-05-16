@@ -7,6 +7,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { User, LogOut, ChevronDown, Ship, Truck, BarChart3, Menu, X } from "lucide-react"
+import Cookies from "js-cookie"
 
 export default function Navigation() {
   const router = useRouter()
@@ -20,12 +21,16 @@ export default function Navigation() {
   const cargoDropdownRef = useRef<HTMLDivElement>(null)
   const mobileMenuRef = useRef<HTMLDivElement>(null)
 
-  useEffect(() => {
-    // Check login status when component mounts
-    const loggedIn = localStorage.getItem("isLoggedIn") === "true"
-    const email = localStorage.getItem("userEmail") || ""
+  // Check login status when component mounts or when the page is focused
+  const checkLoginStatus = () => {
+    const loggedIn = Cookies.get("isLoggedIn") === "true"
+    const email = Cookies.get("userEmail") || ""
     setIsLoggedIn(loggedIn)
     setUserEmail(email)
+  }
+
+  useEffect(() => {
+    checkLoginStatus()
 
     // Add click event listener to close dropdowns when clicking outside
     const handleClickOutside = (event: MouseEvent) => {
@@ -38,8 +43,13 @@ export default function Navigation() {
     }
 
     document.addEventListener("mousedown", handleClickOutside)
+
+    // Add focus event listener to check login status when tab is focused
+    window.addEventListener("focus", checkLoginStatus)
+
     return () => {
       document.removeEventListener("mousedown", handleClickOutside)
+      window.removeEventListener("focus", checkLoginStatus)
     }
   }, [])
 
@@ -69,14 +79,21 @@ export default function Navigation() {
     }
   }, [mobileMenuOpen])
 
-  const handleSignOut = () => {
-    localStorage.removeItem("isLoggedIn")
-    localStorage.removeItem("userEmail")
+  const handleSignOut = (e: React.MouseEvent) => {
+    e.preventDefault() // Prevent default behavior
+
+    // Clear user data from cookies
+    Cookies.remove("isLoggedIn")
+    Cookies.remove("userEmail")
+
+    // Update component state
     setIsLoggedIn(false)
     setUserEmail("")
     setUserDropdownOpen(false)
     setMobileMenuOpen(false)
-    router.push("/")
+
+    // Force a hard navigation to the home page to ensure a complete refresh
+    window.location.href = "/"
   }
 
   const toggleUserDropdown = () => {
