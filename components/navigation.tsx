@@ -20,12 +20,19 @@ export default function Navigation() {
   const cargoDropdownRef = useRef<HTMLDivElement>(null)
   const mobileMenuRef = useRef<HTMLDivElement>(null)
 
-  useEffect(() => {
-    // Check login status when component mounts
+  // Check login status when component mounts or when the page is focused
+  const checkLoginStatus = () => {
     const loggedIn = localStorage.getItem("isLoggedIn") === "true"
     const email = localStorage.getItem("userEmail") || ""
     setIsLoggedIn(loggedIn)
     setUserEmail(email)
+  }
+
+  useEffect(() => {
+    checkLoginStatus()
+
+    // Add event listener for storage changes (in case another tab changes login state)
+    window.addEventListener("storage", checkLoginStatus)
 
     // Add click event listener to close dropdowns when clicking outside
     const handleClickOutside = (event: MouseEvent) => {
@@ -38,8 +45,14 @@ export default function Navigation() {
     }
 
     document.addEventListener("mousedown", handleClickOutside)
+
+    // Add focus event listener to check login status when tab is focused
+    window.addEventListener("focus", checkLoginStatus)
+
     return () => {
+      window.removeEventListener("storage", checkLoginStatus)
       document.removeEventListener("mousedown", handleClickOutside)
+      window.removeEventListener("focus", checkLoginStatus)
     }
   }, [])
 
@@ -69,14 +82,21 @@ export default function Navigation() {
     }
   }, [mobileMenuOpen])
 
-  const handleSignOut = () => {
+  const handleSignOut = (e: React.MouseEvent) => {
+    e.preventDefault() // Prevent default behavior
+
+    // Clear user data from localStorage
     localStorage.removeItem("isLoggedIn")
     localStorage.removeItem("userEmail")
+
+    // Update component state
     setIsLoggedIn(false)
     setUserEmail("")
     setUserDropdownOpen(false)
     setMobileMenuOpen(false)
-    router.push("/")
+
+    // Force a hard navigation to the home page to ensure a complete refresh
+    window.location.href = "/"
   }
 
   const toggleUserDropdown = () => {

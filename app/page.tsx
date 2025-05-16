@@ -8,9 +8,13 @@ export default function Home() {
     <div className="min-h-screen flex flex-col">
       {/* Hero Section with Ocean Background */}
       <div className="relative">
+        {/* Background Image */}
         <div className="absolute inset-0 z-0">
           <Image src="/images/ocean-ship.jpg" alt="Ocean view with cargo ship" fill className="object-cover" priority />
         </div>
+
+        {/* Gradient Overlay */}
+        <div className="absolute inset-0 z-0 bg-gradient-to-b from-black/40 via-black/50 to-black/70"></div>
 
         {/* Navigation */}
         <Navigation />
@@ -22,7 +26,7 @@ export default function Home() {
               Revolutionizing Global Logistics with Blockchain
             </h1>
             <p className="text-white/90 text-lg mb-8">
-              Where to grow your business as a photographer: site or social media?
+              Secure, transparent, and efficient shipping solutions for the modern supply chain
             </p>
             <Link
               href="/product"
@@ -111,10 +115,15 @@ export default function Home() {
               </Link>
             </div>
             <div className="bg-white p-6 rounded-lg">
-              <h3 className="text-lg font-medium mb-4">Vessel animations→</h3>
-              {/* Placeholder for vessel animations */}
-              <div className="aspect-video bg-gray-100 rounded flex items-center justify-center">
-                <p className="text-gray-500">Animation placeholder</p>
+              <h3 className="text-lg font-medium mb-4">Vessel Fleet</h3>
+              <div className="rounded-lg overflow-hidden">
+                <Image
+                  src="/images/vessel-ship.png"
+                  alt="Cargo vessel ship"
+                  width={600}
+                  height={400}
+                  className="w-full h-auto object-cover"
+                />
               </div>
             </div>
           </div>
