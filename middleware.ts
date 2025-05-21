@@ -30,6 +30,8 @@ export function middleware(request: NextRequest) {
   // If the route is not public and the user is not logged in, redirect to signin
   if (!isPublicRoute(pathname) && !isLoggedIn) {
     // Create the redirect URL with the original path as a query parameter
+    // Note: After sign-in/sign-up, users will be redirected to the home page
+    // but we keep the redirect parameter for potential future use
     const redirectUrl = new URL("/signin", request.url)
     redirectUrl.searchParams.set("redirect", pathname)
 

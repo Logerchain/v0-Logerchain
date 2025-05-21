@@ -7,33 +7,72 @@ import Image from "next/image"
 import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
 import Cookies from "js-cookie"
+import { Eye, EyeOff } from "lucide-react"
+import Navigation from "@/components/navigation"
 
 export default function SignIn() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState("")
+  const [isLoading, setIsLoading] = useState(false)
 
   // Get the redirect URL from query parameters
   const redirectUrl = searchParams.get("redirect") || "/"
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    return emailRegex.test(email)
+  }
 
-    // Simple validation
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setError("")
+
+    // Validate inputs
     if (!email || !password) {
       setError("Please enter both email and password")
       return
     }
 
-    // Mock login - in a real app, this would call an API
-    // Set cookies instead of localStorage for better security
-    Cookies.set("isLoggedIn", "true", { expires: 7 }) // Expires in 7 days
-    Cookies.set("userEmail", email, { expires: 7 })
+    if (!validateEmail(email)) {
+      setError("Please enter a valid email address")
+      return
+    }
 
-    // Redirect to the original destination or home page
-    router.push(redirectUrl)
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters long")
+      return
+    }
+
+    setIsLoading(true)
+
+    try {
+      // Simulate network request
+      await new Promise((resolve) => setTimeout(resolve, 1000))
+
+      // For demo purposes, we'll accept any valid email/password
+      // In a real app, this would validate against a backend
+
+      // Set authentication cookies
+      Cookies.set("isLoggedIn", "true", { expires: 7 }) // Expires in 7 days
+      Cookies.set("userEmail", email, { expires: 7 })
+      Cookies.set("userName", email.split("@")[0], { expires: 7 })
+
+      // Always redirect to home page after successful sign in
+      router.push("/")
+    } catch (err) {
+      setError("An error occurred during sign in. Please try again.")
+      console.error("Sign in error:", err)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword)
   }
 
   return (
@@ -44,30 +83,7 @@ export default function SignIn() {
       </div>
 
       {/* Navigation */}
-      <div className="relative z-10 container mx-auto px-4 py-6">
-        <div className="flex justify-between items-center">
-          <div className="flex items-center">
-            <Link href="/">
-              <Image src="/images/logo.png" alt="Logerchain Logo" width={320} height={80} className="h-20 w-auto" />
-            </Link>
-          </div>
-
-          <div className="hidden md:flex items-center space-x-8">
-            <Link href="/" className="text-white hover:text-white/80">
-              Home
-            </Link>
-            <Link href="/product" className="text-white hover:text-white/80">
-              Product
-            </Link>
-            <Link href="/about" className="text-white hover:text-white/80">
-              About
-            </Link>
-            <Link href="/signin" className="bg-white text-[#263238] px-4 py-2 rounded-md hover:bg-white/90">
-              Sign in
-            </Link>
-          </div>
-        </div>
-      </div>
+      <Navigation />
 
       {/* Sign In Form */}
       <div className="relative z-10 flex items-center justify-center min-h-[calc(100vh-120px)]">
@@ -97,7 +113,9 @@ export default function SignIn() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#4285f4]"
+                placeholder="your.email@example.com"
                 required
+                disabled={isLoading}
               />
             </div>
 
@@ -105,21 +123,77 @@ export default function SignIn() {
               <label htmlFor="password" className="block text-gray-700 mb-2">
                 Password
               </label>
-              <input
-                type="password"
-                id="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#4285f4]"
-                required
-              />
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  id="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#4285f4]"
+                  placeholder="••••••••"
+                  required
+                  disabled={isLoading}
+                />
+                <button
+                  type="button"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                  onClick={togglePasswordVisibility}
+                >
+                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                </button>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  id="remember"
+                  className="h-4 w-4 text-[#4285f4] focus:ring-[#4285f4] border-gray-300 rounded"
+                />
+                <label htmlFor="remember" className="ml-2 block text-sm text-gray-700">
+                  Remember me
+                </label>
+              </div>
+              <div className="text-sm">
+                <a href="#" className="text-[#4285f4] hover:underline">
+                  Forgot password?
+                </a>
+              </div>
             </div>
 
             <button
               type="submit"
-              className="w-full bg-[#171717] text-white py-3 rounded-md hover:bg-[#333333] transition"
+              className="w-full bg-[#171717] text-white py-3 rounded-md hover:bg-[#333333] transition flex items-center justify-center"
+              disabled={isLoading}
             >
-              Sign In
+              {isLoading ? (
+                <>
+                  <svg
+                    className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                  </svg>
+                  Signing in...
+                </>
+              ) : (
+                "Sign In"
+              )}
             </button>
           </form>
 
@@ -129,8 +203,6 @@ export default function SignIn() {
             <button className="flex items-center justify-center mx-auto p-2 border border-gray-300 rounded-full hover:bg-gray-50 transition">
               <Image src="/images/google-logo.png" alt="Google" width={24} height={24} />
             </button>
-
-            <button className="mt-6 text-gray-500 hover:text-gray-700">Forgot password?</button>
           </div>
         </div>
       </div>

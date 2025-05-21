@@ -13,6 +13,7 @@ export default function Navigation() {
   const router = useRouter()
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [userEmail, setUserEmail] = useState("")
+  const [userName, setUserName] = useState("")
   const [userDropdownOpen, setUserDropdownOpen] = useState(false)
   const [cargoDropdownOpen, setCargoDropdownOpen] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -25,8 +26,10 @@ export default function Navigation() {
   const checkLoginStatus = () => {
     const loggedIn = Cookies.get("isLoggedIn") === "true"
     const email = Cookies.get("userEmail") || ""
+    const name = Cookies.get("userName") || ""
     setIsLoggedIn(loggedIn)
     setUserEmail(email)
+    setUserName(name)
   }
 
   useEffect(() => {
@@ -85,10 +88,12 @@ export default function Navigation() {
     // Clear user data from cookies
     Cookies.remove("isLoggedIn")
     Cookies.remove("userEmail")
+    Cookies.remove("userName")
 
     // Update component state
     setIsLoggedIn(false)
     setUserEmail("")
+    setUserName("")
     setUserDropdownOpen(false)
     setMobileMenuOpen(false)
 
@@ -156,7 +161,7 @@ export default function Navigation() {
                 className="flex items-center text-white hover:text-white/80 focus:outline-none"
               >
                 <User className="mr-2 h-5 w-5" />
-                <span className="hidden lg:inline">{userEmail.split("@")[0]}</span>
+                <span className="hidden lg:inline">{userName || userEmail.split("@")[0]}</span>
                 <ChevronDown className="ml-1 h-4 w-4" />
               </button>
 
@@ -208,9 +213,16 @@ export default function Navigation() {
               )}
             </div>
           ) : (
-            <Link href="/signin" className="bg-white text-[#263238] px-4 py-2 rounded-md hover:bg-white/90">
-              Sign in
-            </Link>
+            <>
+              {/* Don't show Sign In button on sign-in and sign-up pages */}
+              {typeof window !== "undefined" &&
+                !window.location.pathname.includes("/signin") &&
+                !window.location.pathname.includes("/signup") && (
+                  <Link href="/signin" className="bg-white text-[#263238] px-4 py-2 rounded-md hover:bg-white/90">
+                    Sign in
+                  </Link>
+                )}
+            </>
           )}
         </div>
       </div>
@@ -303,13 +315,20 @@ export default function Navigation() {
                   </button>
                 </>
               ) : (
-                <Link
-                  href="/signin"
-                  className="bg-white text-[#263238] px-4 py-2 rounded-md text-center font-medium"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  Sign in
-                </Link>
+                <>
+                  {/* Don't show Sign In button on sign-in and sign-up pages */}
+                  {typeof window !== "undefined" &&
+                    !window.location.pathname.includes("/signin") &&
+                    !window.location.pathname.includes("/signup") && (
+                      <Link
+                        href="/signin"
+                        className="bg-white text-[#263238] px-4 py-2 rounded-md text-center font-medium"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        Sign in
+                      </Link>
+                    )}
+                </>
               )}
             </nav>
 
