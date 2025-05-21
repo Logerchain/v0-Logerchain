@@ -58,11 +58,24 @@ export default function SignUp() {
     setIsLoading(true)
 
     try {
-      // Simulate network request
+      // In a real app, this would be an API call to your registration endpoint
+      // For demo purposes, we'll simulate a network request
       await new Promise((resolve) => setTimeout(resolve, 1000))
 
-      // For demo purposes, we'll accept any valid form submission
-      // In a real app, this would create a user in the backend
+      // Check if user already exists
+      const users = JSON.parse(localStorage.getItem("users") || "[]")
+      const existingUser = users.find((u: any) => u.email === email)
+
+      if (existingUser) {
+        setError("An account with this email already exists. Please sign in.")
+        setIsLoading(false)
+        return
+      }
+
+      // Add new user to localStorage
+      const newUser = { name, email, password }
+      users.push(newUser)
+      localStorage.setItem("users", JSON.stringify(users))
 
       // Set authentication cookies
       Cookies.set("isLoggedIn", "true", { expires: 7 }) // Expires in 7 days

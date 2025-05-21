@@ -50,16 +50,30 @@ export default function SignIn() {
     setIsLoading(true)
 
     try {
-      // Simulate network request
+      // In a real app, this would be an API call to your authentication endpoint
+      // For demo purposes, we'll simulate a network request
       await new Promise((resolve) => setTimeout(resolve, 1000))
 
-      // For demo purposes, we'll accept any valid email/password
-      // In a real app, this would validate against a backend
+      // Mock login - check if user exists in localStorage
+      const users = JSON.parse(localStorage.getItem("users") || "[]")
+      const user = users.find((u: any) => u.email === email)
+
+      if (!user) {
+        setError("No account found with this email. Please sign up.")
+        setIsLoading(false)
+        return
+      }
+
+      if (user.password !== password) {
+        setError("Incorrect password. Please try again.")
+        setIsLoading(false)
+        return
+      }
 
       // Set authentication cookies
       Cookies.set("isLoggedIn", "true", { expires: 7 }) // Expires in 7 days
       Cookies.set("userEmail", email, { expires: 7 })
-      Cookies.set("userName", email.split("@")[0], { expires: 7 })
+      Cookies.set("userName", user.name || email.split("@")[0], { expires: 7 })
 
       // Always redirect to home page after successful sign in
       router.push("/")
