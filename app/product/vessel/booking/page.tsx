@@ -214,12 +214,12 @@ export default function VesselBooking() {
       <div className="relative z-10 container mx-auto px-4 py-12">
         <h1 className="text-3xl font-bold text-white text-center mb-8">Vessel Booking Form</h1>
 
-        <form onSubmit={handleSubmit} className="max-w-5xl mx-auto bg-white/70 backdrop-blur-sm rounded-lg p-8">
+        <form onSubmit={handleSubmit} className="max-w-5xl mx-auto bg-gray-800 rounded-lg p-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
             {/* Left Column */}
             <div className="space-y-6">
               <div>
-                <label htmlFor="company" className="flex items-center text-black text-lg mb-2">
+                <label htmlFor="company" className="flex items-center text-white text-lg mb-2">
                   <Package className="mr-2 h-5 w-5" />
                   Company
                 </label>
@@ -229,14 +229,14 @@ export default function VesselBooking() {
                   name="company"
                   value={formData.company}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 bg-white/20 backdrop-blur-sm border border-white/30 rounded-md text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white/50 [&::placeholder]:text-white/70 [color-scheme:light]"
+                  className="w-full px-4 py-3 bg-gray-700 border border-white/30 rounded-md text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 [&::placeholder]:text-white/70 [color-scheme:dark]"
                   placeholder="Your company name"
                   required
                 />
               </div>
 
               <div>
-                <label htmlFor="cargoType" className="flex items-center text-black text-lg mb-2">
+                <label htmlFor="cargoType" className="flex items-center text-white text-lg mb-2">
                   <Package className="mr-2 h-5 w-5" />
                   Cargo Type
                 </label>
@@ -245,14 +245,15 @@ export default function VesselBooking() {
                   name="cargoType"
                   value={formData.cargoType}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 bg-white/20 backdrop-blur-sm border border-white/30 rounded-md text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white/50 [color-scheme:light]"
+                  className="w-full px-4 py-3 bg-gray-700 border border-white/30 rounded-md text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 [color-scheme:dark]"
                   required
+                  style={{ color: "white" }}
                 >
-                  <option value="" disabled className="bg-white">
+                  <option value="" disabled className="bg-gray-800">
                     Select cargo type
                   </option>
                   {cargoTypes.map((type) => (
-                    <option key={type} value={type} className="bg-white">
+                    <option key={type} value={type} className="bg-gray-800">
                       {type}
                     </option>
                   ))}
@@ -265,7 +266,7 @@ export default function VesselBooking() {
                     name="cargoTypeOther"
                     value={formData.cargoTypeOther}
                     onChange={handleChange}
-                    className="w-full mt-2 px-4 py-3 bg-white/20 backdrop-blur-sm border border-white/30 rounded-md text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white/50 [&::placeholder]:text-white/70 [color-scheme:light]"
+                    className="w-full mt-2 px-4 py-3 bg-gray-700 border border-white/30 rounded-md text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 [&::placeholder]:text-white/70 [color-scheme:dark]"
                     placeholder="Specify cargo type"
                     required
                   />
@@ -273,7 +274,7 @@ export default function VesselBooking() {
               </div>
 
               <div>
-                <label htmlFor="weightValue" className="flex items-center text-black text-lg mb-2">
+                <label htmlFor="weightValue" className="flex items-center text-white text-lg mb-2">
                   <Weight className="mr-2 h-5 w-5" />
                   Cargo Weight
                 </label>
@@ -286,7 +287,7 @@ export default function VesselBooking() {
                     onChange={handleChange}
                     min="0.001"
                     step="0.001"
-                    className="flex-1 px-4 py-3 bg-white/20 backdrop-blur-sm border border-white/30 rounded-md text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white/50 [&::placeholder]:text-white/70 [color-scheme:light]"
+                    className="flex-1 px-4 py-3 bg-gray-700 border border-white/30 rounded-md text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 [&::placeholder]:text-white/70 [color-scheme:dark]"
                     placeholder="Enter weight"
                     required
                   />
@@ -295,17 +296,18 @@ export default function VesselBooking() {
                     name="weightUnit"
                     value={formData.weightUnit}
                     onChange={handleWeightUnitChange}
-                    className="w-24 px-2 py-3 bg-white/20 backdrop-blur-sm border border-white/30 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-white/50 [color-scheme:light]"
+                    className="w-24 px-2 py-3 bg-gray-700 border border-white/30 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-white/50 [color-scheme:dark]"
+                    style={{ color: "white" }}
                   >
-                    <option value="kg" className="bg-white">
+                    <option value="kg" className="bg-gray-800">
                       kg
                     </option>
-                    <option value="mt" className="bg-white">
+                    <option value="mt" className="bg-gray-800">
                       MT
                     </option>
                   </select>
                 </div>
-                <p className="text-gray-600 text-xs mt-1">
+                <p className="text-white/70 text-xs mt-1">
                   {formData.weightUnit === "kg"
                     ? `${formData.weightValue ? (Number.parseFloat(formData.weightValue) / 1000).toFixed(3) : "0.000"} MT`
                     : `${formData.weightValue ? (Number.parseFloat(formData.weightValue) * 1000).toFixed(0) : "0"} kg`}
@@ -313,7 +315,7 @@ export default function VesselBooking() {
               </div>
 
               <div>
-                <label htmlFor="vesselSize" className="flex items-center text-black text-lg mb-2">
+                <label htmlFor="vesselSize" className="flex items-center text-white text-lg mb-2">
                   <Anchor className="mr-2 h-5 w-5" />
                   Vessel Size
                 </label>
@@ -322,19 +324,20 @@ export default function VesselBooking() {
                   name="vesselSize"
                   value={formData.vesselSize}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 bg-white/20 backdrop-blur-sm border border-white/30 rounded-md text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white/50 [color-scheme:light]"
+                  className="w-full px-4 py-3 bg-gray-700 border border-white/30 rounded-md text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 [color-scheme:dark]"
                   required
+                  style={{ color: "white" }}
                 >
-                  <option value="small" className="bg-white">
+                  <option value="small" className="bg-gray-800">
                     Small (up to 10,000 DWT)
                   </option>
-                  <option value="medium" className="bg-white">
+                  <option value="medium" className="bg-gray-800">
                     Medium (10,000 - 50,000 DWT)
                   </option>
-                  <option value="large" className="bg-white">
+                  <option value="large" className="bg-gray-800">
                     Large (50,000 - 100,000 DWT)
                   </option>
-                  <option value="vlcc" className="bg-white">
+                  <option value="vlcc" className="bg-gray-800">
                     Very Large (100,000+ DWT)
                   </option>
                 </select>
@@ -344,7 +347,7 @@ export default function VesselBooking() {
             {/* Right Column */}
             <div className="space-y-6">
               <div>
-                <label htmlFor="pol" className="flex items-center text-black text-lg mb-2">
+                <label htmlFor="pol" className="flex items-center text-white text-lg mb-2">
                   <MapPin className="mr-2 h-5 w-5" />
                   Port of Loading (POL)
                 </label>
@@ -353,34 +356,35 @@ export default function VesselBooking() {
                   name="pol"
                   value={formData.pol}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 bg-white/20 backdrop-blur-sm border border-white/30 rounded-md text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white/50 [color-scheme:light]"
+                  className="w-full px-4 py-3 bg-gray-700 border border-white/30 rounded-md text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 [color-scheme:dark]"
                   required
+                  style={{ color: "white" }}
                 >
-                  <option value="" disabled className="bg-white">
+                  <option value="" disabled className="bg-gray-800">
                     Select port of loading
                   </option>
-                  <optgroup label="Indonesian Ports" className="bg-white">
+                  <optgroup label="Indonesian Ports" className="bg-gray-800">
                     {indonesianPorts.map((port) => (
-                      <option key={port} value={port} className="bg-white">
+                      <option key={port} value={port} className="bg-gray-800">
                         {port}
                       </option>
                     ))}
                   </optgroup>
-                  <optgroup label="International Ports" className="bg-white">
+                  <optgroup label="International Ports" className="bg-gray-800">
                     {internationalPorts.map((port) => (
-                      <option key={port} value={port} className="bg-white">
+                      <option key={port} value={port} className="bg-gray-800">
                         {port}
                       </option>
                     ))}
                   </optgroup>
-                  <option value="other" className="bg-white">
+                  <option value="other" className="bg-gray-800">
                     Other (specify in notes)
                   </option>
                 </select>
               </div>
 
               <div>
-                <label htmlFor="pod" className="flex items-center text-black text-lg mb-2">
+                <label htmlFor="pod" className="flex items-center text-white text-lg mb-2">
                   <MapPin className="mr-2 h-5 w-5" />
                   Port of Discharge (POD)
                 </label>
@@ -389,34 +393,35 @@ export default function VesselBooking() {
                   name="pod"
                   value={formData.pod}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 bg-white/20 backdrop-blur-sm border border-white/30 rounded-md text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white/50 [color-scheme:light]"
+                  className="w-full px-4 py-3 bg-gray-700 border border-white/30 rounded-md text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 [color-scheme:dark]"
                   required
+                  style={{ color: "white" }}
                 >
-                  <option value="" disabled className="bg-white">
+                  <option value="" disabled className="bg-gray-800">
                     Select port of discharge
                   </option>
-                  <optgroup label="Indonesian Ports" className="bg-white">
+                  <optgroup label="Indonesian Ports" className="bg-gray-800">
                     {indonesianPorts.map((port) => (
-                      <option key={port} value={port} className="bg-white">
+                      <option key={port} value={port} className="bg-gray-800">
                         {port}
                       </option>
                     ))}
                   </optgroup>
-                  <optgroup label="International Ports" className="bg-white">
+                  <optgroup label="International Ports" className="bg-gray-800">
                     {internationalPorts.map((port) => (
-                      <option key={port} value={port} className="bg-white">
+                      <option key={port} value={port} className="bg-gray-800">
                         {port}
                       </option>
                     ))}
                   </optgroup>
-                  <option value="other" className="bg-white">
+                  <option value="other" className="bg-gray-800">
                     Other (specify in notes)
                   </option>
                 </select>
               </div>
 
               <div>
-                <label htmlFor="duration" className="flex items-center text-black text-lg mb-2">
+                <label htmlFor="duration" className="flex items-center text-white text-lg mb-2">
                   <Clock className="mr-2 h-5 w-5" />
                   Duration (days)
                 </label>
@@ -427,14 +432,14 @@ export default function VesselBooking() {
                   value={formData.duration}
                   onChange={handleChange}
                   min="1"
-                  className="w-full px-4 py-3 bg-white/20 backdrop-blur-sm border border-white/30 rounded-md text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white/50 [&::placeholder]:text-white/70 [color-scheme:light]"
+                  className="w-full px-4 py-3 bg-gray-700 border border-white/30 rounded-md text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 [&::placeholder]:text-white/70 [color-scheme:dark]"
                   placeholder="Number of days required"
                   required
                 />
               </div>
 
               <div>
-                <label htmlFor="budgetValue" className="flex items-center text-black text-lg mb-2">
+                <label htmlFor="budgetValue" className="flex items-center text-white text-lg mb-2">
                   <DollarSign className="mr-2 h-5 w-5" />
                   Budget
                 </label>
@@ -446,7 +451,7 @@ export default function VesselBooking() {
                     value={formData.budgetValue}
                     onChange={handleChange}
                     min="1"
-                    className="flex-1 px-4 py-3 bg-white/20 backdrop-blur-sm border border-white/30 rounded-md text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white/50 [&::placeholder]:text-white/70 [color-scheme:light]"
+                    className="flex-1 px-4 py-3 bg-gray-700 border border-white/30 rounded-md text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 [&::placeholder]:text-white/70 [color-scheme:dark]"
                     placeholder="Enter budget amount"
                     required
                   />
@@ -455,17 +460,18 @@ export default function VesselBooking() {
                     name="budgetCurrency"
                     value={formData.budgetCurrency}
                     onChange={handleCurrencyChange}
-                    className="w-24 px-2 py-3 bg-white/20 backdrop-blur-sm border border-white/30 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-white/50 [color-scheme:light]"
+                    className="w-24 px-2 py-3 bg-gray-700 border border-white/30 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-white/50 [color-scheme:dark]"
+                    style={{ color: "white" }}
                   >
-                    <option value="USD" className="bg-white">
+                    <option value="USD" className="bg-gray-800">
                       USD
                     </option>
-                    <option value="IDR" className="bg-white">
+                    <option value="IDR" className="bg-gray-800">
                       IDR
                     </option>
                   </select>
                 </div>
-                <p className="text-gray-600 text-xs mt-1">
+                <p className="text-white/70 text-xs mt-1">
                   {formData.budgetCurrency === "USD"
                     ? `≈ IDR ${formData.budgetValue ? (Number.parseFloat(formData.budgetValue) * exchangeRate).toLocaleString("id-ID") : "0"}`
                     : `≈ USD ${formData.budgetValue ? (Number.parseFloat(formData.budgetValue) / exchangeRate).toFixed(2) : "0.00"}`}
@@ -476,7 +482,7 @@ export default function VesselBooking() {
 
           {/* Laycan Date */}
           <div className="mt-6">
-            <label htmlFor="laycanDate" className="flex items-center text-black text-lg mb-2">
+            <label htmlFor="laycanDate" className="flex items-center text-white text-lg mb-2">
               <Calendar className="mr-2 h-5 w-5" />
               Laycan Date (Earliest Loading Date)
             </label>
@@ -487,14 +493,14 @@ export default function VesselBooking() {
               value={formData.laycanDate}
               onChange={handleChange}
               min={new Date().toISOString().split("T")[0]} // Today's date as minimum
-              className="w-full px-4 py-3 bg-white/20 backdrop-blur-sm border border-white/30 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-white/50 [color-scheme:light]"
+              className="w-full px-4 py-3 bg-gray-700 border border-white/30 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-white/50 [color-scheme:dark]"
               required
             />
           </div>
 
           {/* Additional Notes */}
           <div className="mt-6">
-            <label htmlFor="notes" className="flex items-center text-black text-lg mb-2">
+            <label htmlFor="notes" className="flex items-center text-white text-lg mb-2">
               <Info className="mr-2 h-5 w-5" />
               Additional Notes
             </label>
@@ -504,7 +510,7 @@ export default function VesselBooking() {
               value={formData.notes}
               onChange={handleChange}
               rows={4}
-              className="w-full px-4 py-3 bg-white/20 backdrop-blur-sm border border-white/30 rounded-md text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white/50 [&::placeholder]:text-white/70 [color-scheme:light]"
+              className="w-full px-4 py-3 bg-gray-700 border border-white/30 rounded-md text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 [&::placeholder]:text-white/70 [color-scheme:dark]"
               placeholder="Specify any special requirements, custom ports, or additional information needed for your shipment"
             ></textarea>
           </div>
@@ -513,7 +519,7 @@ export default function VesselBooking() {
           <div className="mt-6">
             <div className="flex items-start">
               <input type="checkbox" id="terms" className="mt-1 mr-2" required />
-              <label htmlFor="terms" className="text-black text-sm">
+              <label htmlFor="terms" className="text-white text-sm">
                 I agree to the{" "}
                 <a href="#" className="underline">
                   terms and conditions

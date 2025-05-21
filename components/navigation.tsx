@@ -7,13 +7,11 @@ import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { User, LogOut, ChevronDown, Ship, Truck, BarChart3, Menu, X } from "lucide-react"
-import Cookies from "js-cookie"
 
 export default function Navigation() {
   const router = useRouter()
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [userEmail, setUserEmail] = useState("")
-  const [userName, setUserName] = useState("")
   const [userDropdownOpen, setUserDropdownOpen] = useState(false)
   const [cargoDropdownOpen, setCargoDropdownOpen] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -24,16 +22,17 @@ export default function Navigation() {
 
   // Check login status when component mounts or when the page is focused
   const checkLoginStatus = () => {
-    const loggedIn = Cookies.get("isLoggedIn") === "true"
-    const email = Cookies.get("userEmail") || ""
-    const name = Cookies.get("userName") || ""
+    const loggedIn = localStorage.getItem("isLoggedIn") === "true"
+    const email = localStorage.getItem("userEmail") || ""
     setIsLoggedIn(loggedIn)
     setUserEmail(email)
-    setUserName(name)
   }
 
   useEffect(() => {
     checkLoginStatus()
+
+    // Add event listener for storage changes (in case another tab changes login state)
+    window.addEventListener("storage", checkLoginStatus)
 
     // Add click event listener to close dropdowns when clicking outside
     const handleClickOutside = (event: MouseEvent) => {
@@ -51,6 +50,7 @@ export default function Navigation() {
     window.addEventListener("focus", checkLoginStatus)
 
     return () => {
+      window.removeEventListener("storage", checkLoginStatus)
       document.removeEventListener("mousedown", handleClickOutside)
       window.removeEventListener("focus", checkLoginStatus)
     }
@@ -85,15 +85,13 @@ export default function Navigation() {
   const handleSignOut = (e: React.MouseEvent) => {
     e.preventDefault() // Prevent default behavior
 
-    // Clear user data from cookies
-    Cookies.remove("isLoggedIn")
-    Cookies.remove("userEmail")
-    Cookies.remove("userName")
+    // Clear user data from localStorage
+    localStorage.removeItem("isLoggedIn")
+    localStorage.removeItem("userEmail")
 
     // Update component state
     setIsLoggedIn(false)
     setUserEmail("")
-    setUserName("")
     setUserDropdownOpen(false)
     setMobileMenuOpen(false)
 
@@ -161,7 +159,7 @@ export default function Navigation() {
                 className="flex items-center text-white hover:text-white/80 focus:outline-none"
               >
                 <User className="mr-2 h-5 w-5" />
-                <span className="hidden lg:inline">{userName || userEmail.split("@")[0]}</span>
+                <span className="hidden lg:inline">{userEmail.split("@")[0]}</span>
                 <ChevronDown className="ml-1 h-4 w-4" />
               </button>
 
@@ -213,16 +211,9 @@ export default function Navigation() {
               )}
             </div>
           ) : (
-            <>
-              {/* Don't show Sign In button on sign-in and sign-up pages */}
-              {typeof window !== "undefined" &&
-                !window.location.pathname.includes("/signin") &&
-                !window.location.pathname.includes("/signup") && (
-                  <Link href="/signin" className="bg-white text-[#263238] px-4 py-2 rounded-md hover:bg-white/90">
-                    Sign in
-                  </Link>
-                )}
-            </>
+            <Link href="/signin" className="bg-white text-[#263238] px-4 py-2 rounded-md hover:bg-white/90">
+              Sign in
+            </Link>
           )}
         </div>
       </div>
@@ -315,20 +306,13 @@ export default function Navigation() {
                   </button>
                 </>
               ) : (
-                <>
-                  {/* Don't show Sign In button on sign-in and sign-up pages */}
-                  {typeof window !== "undefined" &&
-                    !window.location.pathname.includes("/signin") &&
-                    !window.location.pathname.includes("/signup") && (
-                      <Link
-                        href="/signin"
-                        className="bg-white text-[#263238] px-4 py-2 rounded-md text-center font-medium"
-                        onClick={() => setMobileMenuOpen(false)}
-                      >
-                        Sign in
-                      </Link>
-                    )}
-                </>
+                <Link
+                  href="/signin"
+                  className="bg-white text-[#263238] px-4 py-2 rounded-md text-center font-medium"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Sign in
+                </Link>
               )}
             </nav>
 
